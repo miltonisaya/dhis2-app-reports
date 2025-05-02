@@ -1,0 +1,38 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2025-05-02T23:33:13.825Z\n"
+"PO-Revision-Date: 2025-05-02T23:33:13.826Z\n"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "UCS Coordinator Reports"
+msgstr "UCS Coordinator Reports"
+
+msgid "Program"
+msgstr "Program"
+
+msgid "No programs found"
+msgstr "No programs found"
+
+msgid "Organisation Units"
+msgstr "Organisation Units"
+
+msgid "No organisation units found"
+msgstr "No organisation units found"
+
+msgid "Period"
+msgstr "Period"
+
+msgctxt "Application title"
+msgid "__MANIFEST_APP_TITLE"
+msgstr "ucs-reports"
+
+msgctxt "Application description"
+msgid "__MANIFEST_APP_DESCRIPTION"
+msgstr ""

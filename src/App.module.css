@@ -1,0 +1,23 @@
+.container {
+    padding: 16px;
+}
+
+.selector {
+    margin-top: 16px;
+}
+
+.orgUnitTree {
+    margin-top: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    padding: 8px;
+}
+
+.periodSelector {
+    margin-top: 16px;
+}
+
+.selections {
+    margin-top: 16px;
+}
