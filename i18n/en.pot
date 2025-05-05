@@ -5,8 +5,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-05-02T23:33:13.825Z\n"
-"PO-Revision-Date: 2025-05-02T23:33:13.826Z\n"
+"POT-Creation-Date: 2025-05-05T14:18:03.403Z\n"
+"PO-Revision-Date: 2025-05-05T14:18:03.403Z\n"
+
+msgid "Please select a program, organisation unit, start date, and end date."
+msgstr "Please select a program, organisation unit, start date, and end date."
 
 msgid "Loading..."
 msgstr "Loading..."
@@ -26,12 +29,39 @@ msgstr "Organisation Units"
 msgid "No organisation units found"
 msgstr "No organisation units found"
 
+msgid "Start Date"
+msgstr "Start Date"
+
+msgid "End Date"
+msgstr "End Date"
+
+msgid "Generating..."
+msgstr "Generating..."
+
+msgid "Produce Report"
+msgstr "Produce Report"
+
+msgid "Report Results"
+msgstr "Report Results"
+
+msgid "Data Element"
+msgstr "Data Element"
+
+msgid "Organisation Unit"
+msgstr "Organisation Unit"
+
 msgid "Period"
 msgstr "Period"
 
+msgid "Value"
+msgstr "Value"
+
+msgid "No data available"
+msgstr "No data available"
+
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"
-msgstr "ucs-reports"
+msgstr "UCS Coordinator Reports"
 
 msgctxt "Application description"
 msgid "__MANIFEST_APP_DESCRIPTION"
