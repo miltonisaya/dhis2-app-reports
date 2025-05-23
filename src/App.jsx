@@ -129,8 +129,8 @@ const MyApp = () => {
             <div className={classes.form}>
                 {/* Program Selection */}
                 <div className={classes.formItem}>
+                    <h3>{i18n.t('Program')}</h3>
                     <SingleSelectField
-                        label={i18n.t('Program')}
                         selected={selectedProgram}
                         onChange={(e) => setSelectedProgram(e.selected)}
                     >
@@ -169,6 +169,7 @@ const MyApp = () => {
 
                 {/* Start Date */}
                 <div className={classes.formItem}>
+                    <h3>{i18n.t('Start Date')}</h3>
                     <CalendarInput
                         label={i18n.t('Start Date')}
                         calendar="gregory"
@@ -181,8 +182,8 @@ const MyApp = () => {
 
                 {/* End Date */}
                 <div className={classes.formItem}>
+                    <h3>{i18n.t('End Date')}</h3>
                     <CalendarInput
-                        label={i18n.t('End Date')}
                         calendar="gregory"
                         locale="en-GB"
                         dateFormat="DD/MM/YYYY"
