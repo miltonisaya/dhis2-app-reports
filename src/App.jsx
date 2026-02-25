@@ -1,9 +1,7 @@
-import { useDataQuery } from '@dhis2/app-runtime';
-import i18n from '@dhis2/d2-i18n';
-import React, { useState } from 'react';
+import { useDataQuery } from '@dhis2/app-runtime'
+import i18n from '@dhis2/d2-i18n'
+import React, { useState } from 'react'
 import {
-    CalendarInput,
-    OrganisationUnitTree,
     SingleSelectField,
     SingleSelectOption,
     Button,
@@ -12,233 +10,319 @@ import {
     TableRow,
     TableCell,
     TableBody,
-} from '@dhis2/ui';
-import classes from './App.module.css';
+    CircularLoader,
+    NoticeBox,
+} from '@dhis2/ui'
+import PeriodSelector from './components/PeriodSelector'
+import OrgUnitSelector from './components/OrgUnitSelector'
+import classes from './App.module.css'
 
 const programsQuery = {
     results: {
         resource: 'programs',
         params: {
-            pageSize: 5,
+            pageSize: 100,
             fields: ['id', 'displayName'],
         },
     },
-};
+}
 
 const orgUnitQuery = {
     results: {
         resource: 'organisationUnits',
         params: {
-            fields: ['id', 'displayName', 'path', 'code'],
+            fields: ['id', 'displayName', 'path'],
             filter: ['level:eq:1'],
             paging: false,
         },
     },
-};
+}
+
+// Analytics events query — programId, periods and orgUnits are passed as
+// runtime variables via refetch({ programId, periods, orgUnits })
+const analyticsQuery = {
+    events: {
+        resource: 'analytics/events/query',
+        id: ({ programId }) => programId,
+        params: ({ periods, orgUnits }) => ({
+            dimension: [
+                `pe:${periods.join(';')}`,
+                `ou:${orgUnits.join(';')}`,
+            ],
+            displayProperty: 'NAME',
+            pageSize: 100,
+        }),
+    },
+}
 
 const MyApp = () => {
-    const { loading: programLoading, error: programError, data: programData } = useDataQuery(programsQuery);
-    const { loading: orgUnitLoading, error: orgUnitError, data: orgUnitData } = useDataQuery(orgUnitQuery);
-    const [selectedProgram, setSelectedProgram] = useState('');
-    const [selectedOrgUnit, setSelectedOrgUnit] = useState('');
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [reportData, setReportData] = useState(null);
-    const [reportError, setReportError] = useState(null);
-    const [isLoadingReport, setIsLoadingReport] = useState(false);
+    const {
+        loading: programLoading,
+        error: programError,
+        data: programData,
+    } = useDataQuery(programsQuery)
 
-    // Format dates to DHIS2 period format (e.g., 202301 for January 2023)
-    const formatPeriod = (date) => {
-        if (!date) return '';
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        return `${year}${month}`;
-    };
+    const {
+        loading: orgUnitLoading,
+        error: orgUnitError,
+        data: orgUnitData,
+    } = useDataQuery(orgUnitQuery)
 
-    // Handle date changes
-    const handleStartDateChange = ({ date }) => {
-        setStartDate(date);
-    };
+    const {
+        data: analyticsData,
+        loading: analyticsLoading,
+        error: analyticsError,
+        refetch,
+    } = useDataQuery(analyticsQuery, { lazy: true })
 
-    const handleEndDateChange = ({ date }) => {
-        setEndDate(date);
-    };
+    // ── Selection state ──────────────────────────────────────────────────────
+    const [selectedProgram, setSelectedProgram] = useState('')
+    const [selectedPeriods, setSelectedPeriods] = useState([]) // [{ id, name }]
+    const [orgUnitSelection, setOrgUnitSelection] = useState({
+        selected: [],       // org unit paths from OrganisationUnitTree
+        useUserOrgUnit: false,
+        useSubUnits: false,
+        useSubX2Units: false,
+    })
 
-    // Declared function to fetch report data (to be implemented)
-    const fetchReportData = async ({ program, orgUnit, startDate, endDate }) => {
-        // Implementation to be added
-        // Should return the Analytics API response or throw an error
-    };
+    // ── Modal visibility ─────────────────────────────────────────────────────
+    const [showPeriodModal, setShowPeriodModal] = useState(false)
+    const [showOrgUnitModal, setShowOrgUnitModal] = useState(false)
 
-    // Handle report generation
-    const handleGenerateReport = async () => {
-        if (!selectedProgram || !selectedOrgUnit || !startDate || !endDate) {
-            alert(i18n.t('Please select a program, organisation unit, start date, and end date.'));
-            return;
+    const [validationError, setValidationError] = useState('')
+
+    // ── Generate report ──────────────────────────────────────────────────────
+    const handleGenerateReport = () => {
+        setValidationError('')
+
+        if (!selectedProgram) {
+            setValidationError(i18n.t('Please select a program.'))
+            return
+        }
+        if (selectedPeriods.length === 0) {
+            setValidationError(i18n.t('Please select at least one period.'))
+            return
         }
 
-        setIsLoadingReport(true);
-        setReportError(null);
-        setReportData(null);
+        // Build the ou: dimension value — paths from tree → extract last UID segment
+        const treeOrgUnits = orgUnitSelection.selected.map(
+            path => path.split('/').filter(Boolean).pop()
+        )
+        const orgUnits = [
+            ...(orgUnitSelection.useUserOrgUnit ? ['USER_ORGUNIT'] : []),
+            ...(orgUnitSelection.useSubUnits ? ['USER_ORGUNIT_CHILDREN'] : []),
+            ...(orgUnitSelection.useSubX2Units ? ['USER_ORGUNIT_GRANDCHILDREN'] : []),
+            ...treeOrgUnits,
+        ]
 
-        try {
-            // Generate periods for the Analytics API
-            const periods = [];
-            let currentDate = new Date(startDate);
-            while (currentDate <= endDate) {
-                periods.push(formatPeriod(currentDate));
-                currentDate.setMonth(currentDate.getMonth() + 1);
-            }
-
-            // Call the fetchReportData function
-            const data = await fetchReportData({
-                program: selectedProgram,
-                orgUnit: selectedOrgUnit,
-                startDate,
-                endDate,
-            });
-
-            setReportData(data);
-        } catch (error) {
-            setReportError(error.message);
-        } finally {
-            setIsLoadingReport(false);
+        if (orgUnits.length === 0) {
+            setValidationError(i18n.t('Please select at least one organisation unit.'))
+            return
         }
-    };
 
-    // Handle loading and error states for initial queries
+        refetch({
+            programId: selectedProgram,
+            periods: selectedPeriods.map(p => p.id),
+            orgUnits,
+        })
+    }
+
+    // ── Initial data loading ─────────────────────────────────────────────────
     if (programLoading || orgUnitLoading) {
-        return <span>{i18n.t('Loading...')}</span>;
+        return (
+            <div className={classes.centered}>
+                <CircularLoader />
+            </div>
+        )
     }
 
     if (programError) {
-        return <span>{i18n.t('Program Error: {{message}}', { message: programError.message })}</span>;
+        return (
+            <NoticeBox error title={i18n.t('Error loading programs')}>
+                {programError.message}
+            </NoticeBox>
+        )
     }
 
     if (orgUnitError) {
-        return <span>{i18n.t('Org Unit Error: {{message}}', { message: orgUnitError.message })}</span>;
+        return (
+            <NoticeBox error title={i18n.t('Error loading organisation units')}>
+                {orgUnitError.message}
+            </NoticeBox>
+        )
     }
 
-    // Safely get programs and org units arrays
-    const programs = programData?.results?.programs ?? [];
-    const orgUnits = orgUnitData?.results?.organisationUnits ?? [];
+    const programs = programData?.results?.programs ?? []
+    const rootOrgUnitIds = (orgUnitData?.results?.organisationUnits ?? []).map(
+        ou => ou.id
+    )
+
+    // ── Derived display labels ────────────────────────────────────────────────
+    const periodButtonLabel =
+        selectedPeriods.length === 0
+            ? i18n.t('Select period')
+            : selectedPeriods.length === 1
+            ? selectedPeriods[0].name
+            : i18n.t('{{count}} periods selected', { count: selectedPeriods.length })
+
+    const orgUnitParts = [
+        orgUnitSelection.useUserOrgUnit && i18n.t('User org unit'),
+        orgUnitSelection.useSubUnits && i18n.t('Sub-units'),
+        orgUnitSelection.useSubX2Units && i18n.t('Sub-x2-units'),
+        orgUnitSelection.selected.length > 0 &&
+            i18n.t('{{count}} unit(s)', { count: orgUnitSelection.selected.length }),
+    ].filter(Boolean)
+
+    const orgUnitButtonLabel =
+        orgUnitParts.length === 0
+            ? i18n.t('Select organisation unit')
+            : orgUnitParts.join(', ')
+
+    // ── Analytics response ────────────────────────────────────────────────────
+    // Keep original index so row values align after hidden-column filtering
+    const analyticsHeaders = (analyticsData?.events?.headers ?? [])
+        .map((h, index) => ({ ...h, index }))
+        .filter(h => !h.hidden)
+    const analyticsRows = analyticsData?.events?.rows ?? []
 
     return (
-        <div className={classes.container}>
-            <h1 className={classes.title}>{i18n.t('UCS Coordinator Reports')}</h1>
-            <div className={classes.form}>
-                {/* Program Selection */}
-                <div className={classes.formItem}>
-                    <h3>{i18n.t('Program')}</h3>
+        <div className={classes.layout}>
+            {/* ── Left sidebar ── */}
+            <div className={classes.sidebar}>
+                <h1 className={classes.title}>{i18n.t('UCS Coordinator Reports')}</h1>
+
+                {/* Program */}
+                <div className={classes.filterItem}>
                     <SingleSelectField
+                        label={i18n.t('Program')}
                         selected={selectedProgram}
-                        onChange={(e) => setSelectedProgram(e.selected)}
+                        onChange={({ selected }) => setSelectedProgram(selected)}
+                        placeholder={i18n.t('Select a program')}
                     >
-                        {programs.length > 0 ? (
-                            programs.map((program) => (
-                                <SingleSelectOption
-                                    key={program.id}
-                                    label={program.displayName}
-                                    value={program.id}
-                                />
-                            ))
-                        ) : (
+                        {programs.map(p => (
                             <SingleSelectOption
-                                label={i18n.t('No programs found')}
-                                value=""
-                                disabled
+                                key={p.id}
+                                label={p.displayName}
+                                value={p.id}
                             />
-                        )}
+                        ))}
                     </SingleSelectField>
                 </div>
 
-                {/* Organisation Unit Tree */}
-                <div className={classes.formItem}>
-                    <h3>{i18n.t('Organisation Units')}</h3>
-                    {orgUnits.length > 0 ? (
-                        <OrganisationUnitTree
-                            roots={orgUnits.map((ou) => ou.id)}
-                            onChange={({ selected }) => setSelectedOrgUnit(selected[0] || '')}
-                            selected={selectedOrgUnit ? [selectedOrgUnit] : []}
-                            singleSelection
-                        />
-                    ) : (
-                        <span>{i18n.t('No organisation units found')}</span>
-                    )}
+                {/* Period */}
+                <div className={classes.filterItem}>
+                    <span className={classes.filterLabel}>{i18n.t('Period')}</span>
+                    <Button onClick={() => setShowPeriodModal(true)}>
+                        {periodButtonLabel}
+                    </Button>
                 </div>
 
-                {/* Start Date */}
-                <div className={classes.formItem}>
-                    <h3>{i18n.t('Start Date')}</h3>
-                    <CalendarInput
-                        label={i18n.t('Start Date')}
-                        calendar="gregory"
-                        locale="en-GB"
-                        dateFormat="DD/MM/YYYY"
-                        date={startDate} // Bind selected startDate
-                        onDateSelect={handleStartDateChange}
-                    />
+                {/* Organisation Unit */}
+                <div className={classes.filterItem}>
+                    <span className={classes.filterLabel}>
+                        {i18n.t('Organisation Unit')}
+                    </span>
+                    <Button onClick={() => setShowOrgUnitModal(true)}>
+                        {orgUnitButtonLabel}
+                    </Button>
                 </div>
 
-                {/* End Date */}
-                <div className={classes.formItem}>
-                    <h3>{i18n.t('End Date')}</h3>
-                    <CalendarInput
-                        calendar="gregory"
-                        locale="en-GB"
-                        dateFormat="DD/MM/YYYY"
-                        date={endDate} // Bind selected endDate
-                        onDateSelect={handleEndDateChange}
-                    />
-                </div>
-            </div>
-
-            {/* Generate Report Button */}
-            <div className={classes.buttonContainer}>
-                <Button primary onClick={handleGenerateReport} disabled={isLoadingReport}>
-                    {isLoadingReport ? i18n.t('Generating...') : i18n.t('Produce Report')}
+                {/* Generate Report */}
+                <Button
+                    primary
+                    onClick={handleGenerateReport}
+                    disabled={analyticsLoading}
+                >
+                    {analyticsLoading
+                        ? i18n.t('Loading...')
+                        : i18n.t('Generate Report')}
                 </Button>
             </div>
 
-            {/* Report Output */}
-            {reportError && (
-                <div className={classes.error}>
-                    {i18n.t('Error fetching report: {{message}}', { message: reportError })}
-                </div>
+            {/* ── Right main panel ── */}
+            <div className={classes.main}>
+                {/* Validation error */}
+                {validationError && (
+                    <div className={classes.notice}>
+                        <NoticeBox error title={i18n.t('Validation error')}>
+                            {validationError}
+                        </NoticeBox>
+                    </div>
+                )}
+
+                {/* Analytics error */}
+                {analyticsError && (
+                    <div className={classes.notice}>
+                        <NoticeBox error title={i18n.t('Error fetching report')}>
+                            {analyticsError.message}
+                        </NoticeBox>
+                    </div>
+                )}
+
+                {/* Loading spinner */}
+                {analyticsLoading && (
+                    <div className={classes.centered}>
+                        <CircularLoader />
+                    </div>
+                )}
+
+                {/* Results table */}
+                {analyticsData && !analyticsLoading && (
+                    <div className={classes.report}>
+                        <h2>{i18n.t('Report Results')}</h2>
+                        {analyticsRows.length === 0 ? (
+                            <NoticeBox title={i18n.t('No data')}>
+                                {i18n.t('No data found for the selected criteria.')}
+                            </NoticeBox>
+                        ) : (
+                            <div className={classes.tableWrapper}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            {analyticsHeaders.map(h => (
+                                                <TableCell key={h.name}>
+                                                    {h.column}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {analyticsRows.map((row, rowIndex) => (
+                                            <TableRow key={rowIndex}>
+                                                {analyticsHeaders.map(h => (
+                                                    <TableCell key={h.name}>
+                                                        {row[h.index] ?? '—'}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* ── Modals ── */}
+            {showPeriodModal && (
+                <PeriodSelector
+                    selectedPeriods={selectedPeriods}
+                    onUpdate={setSelectedPeriods}
+                    onClose={() => setShowPeriodModal(false)}
+                />
             )}
-            {reportData && (
-                <div className={classes.report}>
-                    <h2>{i18n.t('Report Results')}</h2>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>{i18n.t('Data Element')}</TableCell>
-                                <TableCell>{i18n.t('Organisation Unit')}</TableCell>
-                                <TableCell>{i18n.t('Period')}</TableCell>
-                                <TableCell>{i18n.t('Value')}</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {reportData.rows && reportData.rows.length > 0 ? (
-                                reportData.rows.map((row, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>{row[0]}</TableCell>
-                                        <TableCell>{row[1]}</TableCell>
-                                        <TableCell>{row[2]}</TableCell>
-                                        <TableCell>{row[3]}</TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={4}>{i18n.t('No data available')}</TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
+
+            {showOrgUnitModal && (
+                <OrgUnitSelector
+                    roots={rootOrgUnitIds}
+                    initialSelection={orgUnitSelection}
+                    onUpdate={setOrgUnitSelection}
+                    onClose={() => setShowOrgUnitModal(false)}
+                />
             )}
         </div>
-    );
-};
+    )
+}
 
-export default MyApp;
+export default MyApp
