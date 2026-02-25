@@ -7,6 +7,11 @@ export const REPORTS = [
         id: 'school-program',
         name: 'School Program Report',
         programId: 'SCHOOL_PROGRAM_ID',
+        letterhead: [
+            'MINISTRY OF HEALTH',
+            'DIRECTORATE OF PREVENTIVE SERVICES- HEALTH PROMOTION SECTION',
+            'HEALTH EDUCATION AND PROMOTION IN SCHOOLS',
+        ],
         sections: [
             {
                 id: 'schools-reached',
@@ -153,7 +158,7 @@ export const REPORTS = [
                     { label: '4. T-shirt',           dxId: 'DX_SBC_TSHIRT' },
                     { label: '5. Umbrella',          dxId: 'DX_SBC_UMBRELLA' },
                     { label: '6. Tyre cover',        dxId: 'DX_SBC_TYRE_COVER' },
-                    { label: '7. Kanga',             dxId: 'DX_SBC_KANGA' },
+                    { label: '7. Khanga',            dxId: 'DX_SBC_KHANGA' },
                     { label: '8. Pen',               dxId: 'DX_SBC_PEN' },
                     { label: '9. Cap',               dxId: 'DX_SBC_CAP' },
                     { label: '10. Others',           dxId: 'DX_SBC_OTHERS' },
