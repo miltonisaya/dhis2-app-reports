@@ -1,67 +1,93 @@
-.container {
-    padding: 24px;
-    margin: 0 auto;
-    width: 100%;
+/* ── Top-level layout ── */
+.layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ── Left sidebar ── */
+.sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-right: 1px solid #d5dde5;
+    background: #f8f9fa;
+    overflow-y: auto;
 }
 
 .title {
-    font-size: 24px;
+    font-size: 15px;
     font-weight: 600;
-    margin-bottom: 24px;
+    color: #212529;
+    margin: 0 0 4px;
 }
 
-.form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-.formItem {
+/* Each filter block in the sidebar */
+.filterItem {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
-.formItem h3 {
-    font-size: 16px;
+.filterLabel {
+    font-size: 12px;
     font-weight: 500;
-    margin: 0 0 8px 0;
+    color: #495057;
 }
 
-.orgUnitTree {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #e0e0e0;
-    padding: 8px;
-    border-radius: 4px;
-}
-
-.buttonContainer {
+/* ── Right main panel ── */
+.main {
+    flex: 1;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 24px;
 }
 
-.error {
-    margin-top: 16px;
-    padding: 12px;
-    background-color: #fce7e7;
-    color: #a71a1a;
-    border-radius: 4px;
+/* ── Feedback ── */
+.centered {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
 }
 
+.notice {
+    margin-bottom: 16px;
+}
+
+/* ── Report table ── */
 .report {
-    margin-top: 24px;
+    margin-top: 8px;
 }
 
 .report h2 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     margin-bottom: 16px;
 }
 
+.tableWrapper {
+    overflow-x: auto;
+    border: 1px solid #e8edf2;
+    border-radius: 4px;
+}
+
 @media (max-width: 768px) {
-    .form {
-        grid-template-columns: 1fr;
+    .layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #d5dde5;
+    }
+
+    .main {
+        padding: 16px;
     }
 }
