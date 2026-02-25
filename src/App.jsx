@@ -1,31 +1,17 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
-    SingleSelectField,
-    SingleSelectOption,
     Button,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
     CircularLoader,
     NoticeBox,
 } from '@dhis2/ui'
 import PeriodSelector from './components/PeriodSelector'
 import OrgUnitSelector from './components/OrgUnitSelector'
+import ReportNav from './components/ReportNav'
+import ReportRenderer from './components/ReportRenderer'
+import { REPORTS, collectDxIds } from './reportConfig'
 import classes from './App.module.css'
-
-const programsQuery = {
-    results: {
-        resource: 'programs',
-        params: {
-            pageSize: 100,
-            fields: ['id', 'displayName'],
-        },
-    },
-}
 
 const orgUnitQuery = {
     results: {
@@ -38,30 +24,21 @@ const orgUnitQuery = {
     },
 }
 
-// Analytics events query — programId, periods and orgUnits are passed as
-// runtime variables via refetch({ programId, periods, orgUnits })
+// Aggregate analytics query — dxIds, periods, orgUnits are runtime variables
 const analyticsQuery = {
-    events: {
-        resource: 'analytics/events/query',
-        id: ({ programId }) => programId,
-        params: ({ periods, orgUnits }) => ({
+    data: {
+        resource: 'analytics',
+        params: ({ dxIds, periods, orgUnits }) => ({
             dimension: [
+                `dx:${dxIds.join(';')}`,
                 `pe:${periods.join(';')}`,
                 `ou:${orgUnits.join(';')}`,
             ],
-            displayProperty: 'NAME',
-            pageSize: 100,
         }),
     },
 }
 
 const MyApp = () => {
-    const {
-        loading: programLoading,
-        error: programError,
-        data: programData,
-    } = useDataQuery(programsQuery)
-
     const {
         loading: orgUnitLoading,
         error: orgUnitError,
@@ -75,36 +52,42 @@ const MyApp = () => {
         refetch,
     } = useDataQuery(analyticsQuery, { lazy: true })
 
-    // ── Selection state ──────────────────────────────────────────────────────
-    const [selectedProgram, setSelectedProgram] = useState('')
-    const [selectedPeriods, setSelectedPeriods] = useState([]) // [{ id, name }]
+    // ── Report navigation ─────────────────────────────────────────────────────
+    const [activeReportId, setActiveReportId] = useState(REPORTS[0].id)
+    const activeReport = REPORTS.find(r => r.id === activeReportId)
+
+    const handleSelectReport = id => {
+        setActiveReportId(id)
+        setValidationError('')
+    }
+
+    // Collect all DX IDs referenced by the active report
+    const dxIds = useMemo(() => collectDxIds(activeReport), [activeReportId])
+
+    // ── Selection state ───────────────────────────────────────────────────────
+    const [selectedPeriods, setSelectedPeriods] = useState([])
     const [orgUnitSelection, setOrgUnitSelection] = useState({
-        selected: [],       // org unit paths from OrganisationUnitTree
+        selected: [],
         useUserOrgUnit: false,
         useSubUnits: false,
         useSubX2Units: false,
     })
 
-    // ── Modal visibility ─────────────────────────────────────────────────────
+    // ── Modal visibility ──────────────────────────────────────────────────────
     const [showPeriodModal, setShowPeriodModal] = useState(false)
     const [showOrgUnitModal, setShowOrgUnitModal] = useState(false)
 
     const [validationError, setValidationError] = useState('')
 
-    // ── Generate report ──────────────────────────────────────────────────────
+    // ── Generate report ───────────────────────────────────────────────────────
     const handleGenerateReport = () => {
         setValidationError('')
 
-        if (!selectedProgram) {
-            setValidationError(i18n.t('Please select a program.'))
-            return
-        }
         if (selectedPeriods.length === 0) {
             setValidationError(i18n.t('Please select at least one period.'))
             return
         }
 
-        // Build the ou: dimension value — paths from tree → extract last UID segment
         const treeOrgUnits = orgUnitSelection.selected.map(
             path => path.split('/').filter(Boolean).pop()
         )
@@ -121,26 +104,27 @@ const MyApp = () => {
         }
 
         refetch({
-            programId: selectedProgram,
+            dxIds,
             periods: selectedPeriods.map(p => p.id),
             orgUnits,
         })
     }
 
-    // ── Initial data loading ─────────────────────────────────────────────────
-    if (programLoading || orgUnitLoading) {
+    // ── Value map: sum across pe/ou if multiple selected ──────────────────────
+    const valueMap = useMemo(() => {
+        const map = {}
+        for (const [dxId, , , value] of analyticsData?.data?.rows ?? []) {
+            map[dxId] = (map[dxId] ?? 0) + (parseFloat(value) || 0)
+        }
+        return map
+    }, [analyticsData])
+
+    // ── Initial data loading ──────────────────────────────────────────────────
+    if (orgUnitLoading) {
         return (
             <div className={classes.centered}>
                 <CircularLoader />
             </div>
-        )
-    }
-
-    if (programError) {
-        return (
-            <NoticeBox error title={i18n.t('Error loading programs')}>
-                {programError.message}
-            </NoticeBox>
         )
     }
 
@@ -152,7 +136,6 @@ const MyApp = () => {
         )
     }
 
-    const programs = programData?.results?.programs ?? []
     const rootOrgUnitIds = (orgUnitData?.results?.organisationUnits ?? []).map(
         ou => ou.id
     )
@@ -178,36 +161,18 @@ const MyApp = () => {
             ? i18n.t('Select organisation unit')
             : orgUnitParts.join(', ')
 
-    // ── Analytics response ────────────────────────────────────────────────────
-    // Keep original index so row values align after hidden-column filtering
-    const analyticsHeaders = (analyticsData?.events?.headers ?? [])
-        .map((h, index) => ({ ...h, index }))
-        .filter(h => !h.hidden)
-    const analyticsRows = analyticsData?.events?.rows ?? []
-
     return (
         <div className={classes.layout}>
             {/* ── Left sidebar ── */}
             <div className={classes.sidebar}>
                 <h1 className={classes.title}>{i18n.t('UCS Coordinator Reports')}</h1>
 
-                {/* Program */}
-                <div className={classes.filterItem}>
-                    <SingleSelectField
-                        label={i18n.t('Program')}
-                        selected={selectedProgram}
-                        onChange={({ selected }) => setSelectedProgram(selected)}
-                        placeholder={i18n.t('Select a program')}
-                    >
-                        {programs.map(p => (
-                            <SingleSelectOption
-                                key={p.id}
-                                label={p.displayName}
-                                value={p.id}
-                            />
-                        ))}
-                    </SingleSelectField>
-                </div>
+                {/* Report navigation */}
+                <ReportNav
+                    reports={REPORTS}
+                    activeId={activeReportId}
+                    onSelect={handleSelectReport}
+                />
 
                 {/* Period */}
                 <div className={classes.filterItem}>
@@ -241,6 +206,11 @@ const MyApp = () => {
 
             {/* ── Right main panel ── */}
             <div className={classes.main}>
+                {/* Report title (always visible) */}
+                <h2 style={{ fontSize: 17, fontWeight: 600, margin: '0 0 16px', color: '#1a3c52' }}>
+                    {activeReport.name}
+                </h2>
+
                 {/* Validation error */}
                 {validationError && (
                     <div className={classes.notice}>
@@ -266,41 +236,12 @@ const MyApp = () => {
                     </div>
                 )}
 
-                {/* Results table */}
-                {analyticsData && !analyticsLoading && (
-                    <div className={classes.report}>
-                        <h2>{i18n.t('Report Results')}</h2>
-                        {analyticsRows.length === 0 ? (
-                            <NoticeBox title={i18n.t('No data')}>
-                                {i18n.t('No data found for the selected criteria.')}
-                            </NoticeBox>
-                        ) : (
-                            <div className={classes.tableWrapper}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            {analyticsHeaders.map(h => (
-                                                <TableCell key={h.name}>
-                                                    {h.column}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {analyticsRows.map((row, rowIndex) => (
-                                            <TableRow key={rowIndex}>
-                                                {analyticsHeaders.map(h => (
-                                                    <TableCell key={h.name}>
-                                                        {row[h.index] ?? '—'}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        )}
-                    </div>
+                {/* Structured report */}
+                {!analyticsLoading && (
+                    <ReportRenderer
+                        report={activeReport}
+                        valueMap={valueMap}
+                    />
                 )}
             </div>
 
