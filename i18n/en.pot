@@ -5,14 +5,38 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-05-05T14:18:03.403Z\n"
-"PO-Revision-Date: 2025-05-05T14:18:03.403Z\n"
+"POT-Creation-Date: 2026-03-02T10:03:59.977Z\n"
+"PO-Revision-Date: 2026-03-02T10:03:59.978Z\n"
 
-msgid "Please select a program, organisation unit, start date, and end date."
-msgstr "Please select a program, organisation unit, start date, and end date."
+msgid "Please select a program."
+msgstr "Please select a program."
 
-msgid "Loading..."
-msgstr "Loading..."
+msgid "Please select at least one period."
+msgstr "Please select at least one period."
+
+msgid "Please select at least one organisation unit."
+msgstr "Please select at least one organisation unit."
+
+msgid "Error loading programs"
+msgstr "Error loading programs"
+
+msgid "Error loading organisation units"
+msgstr "Error loading organisation units"
+
+msgid "Select period"
+msgstr "Select period"
+
+msgid "User org unit"
+msgstr "User org unit"
+
+msgid "Sub-units"
+msgstr "Sub-units"
+
+msgid "Sub-x2-units"
+msgstr "Sub-x2-units"
+
+msgid "Select organisation unit"
+msgstr "Select organisation unit"
 
 msgid "UCS Coordinator Reports"
 msgstr "UCS Coordinator Reports"
@@ -20,48 +44,39 @@ msgstr "UCS Coordinator Reports"
 msgid "Program"
 msgstr "Program"
 
-msgid "No programs found"
-msgstr "No programs found"
-
-msgid "Organisation Units"
-msgstr "Organisation Units"
-
-msgid "No organisation units found"
-msgstr "No organisation units found"
-
-msgid "Start Date"
-msgstr "Start Date"
-
-msgid "End Date"
-msgstr "End Date"
-
-msgid "Generating..."
-msgstr "Generating..."
-
-msgid "Produce Report"
-msgstr "Produce Report"
-
-msgid "Report Results"
-msgstr "Report Results"
-
-msgid "Data Element"
-msgstr "Data Element"
-
-msgid "Organisation Unit"
-msgstr "Organisation Unit"
+msgid "Select a program"
+msgstr "Select a program"
 
 msgid "Period"
 msgstr "Period"
 
-msgid "Value"
-msgstr "Value"
+msgid "Organisation Unit"
+msgstr "Organisation Unit"
 
-msgid "No data available"
-msgstr "No data available"
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Generate Report"
+msgstr "Generate Report"
+
+msgid "Validation error"
+msgstr "Validation error"
+
+msgid "Error fetching report"
+msgstr "Error fetching report"
+
+msgid "Report Results"
+msgstr "Report Results"
+
+msgid "No data"
+msgstr "No data"
+
+msgid "No data found for the selected criteria."
+msgstr "No data found for the selected criteria."
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"
-msgstr "UCS Coordinator Reports"
+msgstr "ucs-coordinator-reports"
 
 msgctxt "Application description"
 msgid "__MANIFEST_APP_DESCRIPTION"
