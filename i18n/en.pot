@@ -5,14 +5,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-02-25T18:20:03.768Z\n"
-"PO-Revision-Date: 2026-02-25T18:20:03.768Z\n"
+"POT-Creation-Date: 2026-03-02T10:03:59.977Z\n"
+"PO-Revision-Date: 2026-03-02T10:03:59.978Z\n"
+
+msgid "Please select a program."
+msgstr "Please select a program."
 
 msgid "Please select at least one period."
 msgstr "Please select at least one period."
 
 msgid "Please select at least one organisation unit."
 msgstr "Please select at least one organisation unit."
+
+msgid "Error loading programs"
+msgstr "Error loading programs"
 
 msgid "Error loading organisation units"
 msgstr "Error loading organisation units"
@@ -35,6 +41,12 @@ msgstr "Select organisation unit"
 msgid "UCS Coordinator Reports"
 msgstr "UCS Coordinator Reports"
 
+msgid "Program"
+msgstr "Program"
+
+msgid "Select a program"
+msgstr "Select a program"
+
 msgid "Period"
 msgstr "Period"
 
@@ -52,6 +64,15 @@ msgstr "Validation error"
 
 msgid "Error fetching report"
 msgstr "Error fetching report"
+
+msgid "Report Results"
+msgstr "Report Results"
+
+msgid "No data"
+msgstr "No data"
+
+msgid "No data found for the selected criteria."
+msgstr "No data found for the selected criteria."
 
 msgctxt "Application title"
 msgid "__MANIFEST_APP_TITLE"

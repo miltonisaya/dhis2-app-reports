@@ -1,10 +1,11 @@
 const config = {
     type: 'app',
-    name: 'UCS Coordinator Reports',
+    name: "UCS Coordinator's Reports",
+    title: "UCS Coordinator's Reports",
+    icon: './logo.png',
     entryPoints: {
         app: './src/App.jsx',
     },
-    icon: 'icon.png',
 }
 
 module.exports = config
