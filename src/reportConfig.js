@@ -85,10 +85,10 @@ export const REPORTS = [
                 showColumnTotal: true,
                 showTotal: false,
                 columns: [
-                    { label: 'Radio',        key: 'ITdHv76yKln' },
-                    { label: 'Television',   key: 'OUNyKcDfjXu' },
-                    { label: 'Social Media', key: 'O773eL7HB6P' },
-                    { label: 'Others',       key: 'Ca1KCq3gtib' },
+                    { label: 'Radio',        key: 'RADIO' },
+                    { label: 'Television',   key: 'TV' },
+                    { label: 'Social Media', key: 'SOCIAL' },
+                    { label: 'Others',       key: 'OTHERS' },
                 ],
                 rows: [
                     {
