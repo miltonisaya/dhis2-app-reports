@@ -63,7 +63,8 @@ export const REPORTS = [
                     { label: '9. Umbrellas',            dxId: 'tp1oHrE4hqb' },
                     { label: '10. T-Shirts',            dxId: 'G4cao2HVSIy' },
                     { label: '11. Others',              dxId: 'fSPrEQdIcf8' },
-                    { label: '12. None',                dxId: 'DX_IEC_NONE' },
+                    // TODO: replace placeholder with real DHIS2 UID
+                    // { label: '12. None', dxId: 'DX_IEC_NONE' },
                 ],
             },
         ],
@@ -99,10 +100,8 @@ export const REPORTS = [
                         label: 'Number of national media engaged in provision of health messages',
                         dxIds: { RADIO: 'NQgXOCoKWmY', TV: 'KBY47sIzjs4', SOCIAL: 'QxCZuiIOD7S', OTHERS: 'nzNjnmA1zD9' },
                     },
-                    {
-                        label: 'Number of people reached by mass and social media contents aired',
-                        dxIds: { RADIO: 'DX_MM_PEOPLE_RADIO', TV: 'DX_MM_PEOPLE_TV', SOCIAL: 'DX_MM_PEOPLE_SOCIAL', OTHERS: 'DX_MM_PEOPLE_OTHERS' },
-                    },
+                    // TODO: replace placeholders with real DHIS2 UIDs
+                    // { label: 'Number of people reached by mass and social media contents aired', dxIds: { RADIO: 'DX_MM_PEOPLE_RADIO', TV: 'DX_MM_PEOPLE_TV', SOCIAL: 'DX_MM_PEOPLE_SOCIAL', OTHERS: 'DX_MM_PEOPLE_OTHERS' } },
                     {
                       label: 'Number of mass media contents produced and aired to address specific health area',
                         dxIds: { RADIO: 'ITdHv76yKln', TV: 'OUNyKcDfjXu', SOCIAL: 'O773eL7HB6P', OTHERS: 'Ca1KCq3gtib' },
@@ -141,7 +140,8 @@ export const REPORTS = [
                     { label: '2. Pupils/Students',                    dxIds: { MALE: 'F2vLXyOr2RI',     FEMALE: 'D4k1PI3VB3H' } },
                     { label: '3. Media personnel',                    dxIds: { MALE: 'ZIM80MHAt6w',     FEMALE: 'Yot7vLXHYK7' } },
                     { label: '4. Traditional/Alternative medicines',  dxIds: { MALE: 'RkbsmblVLGu',     FEMALE: 'hrIj2XUWEzJ' } },
-                    { label: '5. Society (Gathering of people)',      dxIds: { MALE: 'DX_MID_SOCIETY_M',FEMALE: 'DX_MID_SOCIETY_F' } },
+                    // TODO: replace placeholders with real DHIS2 UIDs
+                    // { label: '5. Society (Gathering of people)', dxIds: { MALE: 'DX_MID_SOCIETY_M', FEMALE: 'DX_MID_SOCIETY_F' } },
                     { label: '6. Community leaders',                  dxIds: { MALE: 'U35WwTxh3Zz',     FEMALE: 'SoiS6lyqPQZ' } },
                     { label: '7. Governments leaders',                dxIds: { MALE: 'ABMMioQkYwE',     FEMALE: 'xPYskZeOm5V' } },
                     { label: '8. Others',                             dxIds: { MALE: 'ZEuWzm4wMTc',     FEMALE: 'bq1fRn9npQL' } },
@@ -161,9 +161,11 @@ export const REPORTS = [
                     { label: '5. Umbrella',          dxId: 'U0AGeKGZzF3' },
                     { label: '6. Tyre cover',        dxId: 'n01JMcnTJRF' },
                     { label: '7. Khanga',            dxId: 'eUwc2TmuVVe' },
-                    { label: '8. Pen',               dxId: 'DX_SBC_PEN' },
+                    // TODO: replace placeholder with real DHIS2 UID
+                    // { label: '8. Pen', dxId: 'DX_SBC_PEN' },
                     { label: '9. Cap',               dxId: 'so89qjm7pnq' },
-                    { label: '10. Others',           dxId: 'DX_SBC_OTHERS' },
+                    // TODO: replace placeholder with real DHIS2 UID
+                    // { label: '10. Others', dxId: 'DX_SBC_OTHERS' },
                 ],
             },
             {
