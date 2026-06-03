@@ -16,12 +16,11 @@ const SimpleTable = ({ section, valueMap }) => {
     return (
         <div className={classes.sectionBlock}>
             {title && <p className={classes.sectionTitle}>{title}</p>}
-            {subtitle && <p className={classes.sectionSubtitle}>{subtitle}</p>}
 
             <table className={classes.reportTable}>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>{subtitle ?? ''}</th>
                         <th className={classes.numCell}>{valueLabel ?? 'Value'}</th>
                     </tr>
                 </thead>

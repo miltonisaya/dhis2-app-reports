@@ -1,6 +1,6 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import {
     Button,
     CircularLoader,
@@ -51,6 +51,35 @@ const MyApp = () => {
         error: analyticsError,
         refetch,
     } = useDataQuery(analyticsQuery, { lazy: true })
+
+    const printRef = useRef()
+
+    const handlePrint = () => {
+        const content = printRef.current
+        if (!content) return
+
+        const styles = Array.from(document.styleSheets).reduce((acc, sheet) => {
+            try {
+                return acc + Array.from(sheet.cssRules).map(r => r.cssText).join('\n')
+            } catch {
+                return acc
+            }
+        }, '')
+
+        const win = window.open('', '_blank', 'width=900,height=700')
+        win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>${activeReport?.name ?? 'Report'}</title>
+    <style>body { font-family: sans-serif; padding: 24px; } ${styles}</style>
+</head>
+<body>${content.innerHTML}</body>
+</html>`)
+        win.document.close()
+        win.focus()
+        setTimeout(() => { win.print(); win.close() }, 500)
+    }
 
     // ── Report navigation ─────────────────────────────────────────────────────
     const [activeReportId, setActiveReportId] = useState(REPORTS[0].id)
@@ -192,6 +221,14 @@ const MyApp = () => {
                     </Button>
                 </div>
 
+                {/* Print Report */}
+                <Button
+                    onClick={handlePrint}
+                    disabled={!analyticsData || analyticsLoading}
+                >
+                    {i18n.t('Print Report')}
+                </Button>
+
                 {/* Generate Report */}
                 <Button
                     primary
@@ -238,10 +275,12 @@ const MyApp = () => {
 
                 {/* Structured report */}
                 {!analyticsLoading && (
-                    <ReportRenderer
-                        report={activeReport}
-                        valueMap={valueMap}
-                    />
+                    <div ref={printRef}>
+                        <ReportRenderer
+                            report={activeReport}
+                            valueMap={valueMap}
+                        />
+                    </div>
                 )}
             </div>
 
