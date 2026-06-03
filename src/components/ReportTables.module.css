@@ -59,6 +59,14 @@
     text-align: right;
 }
 
+/* N/A cell — not applicable for this indicator/channel combination */
+.naCell {
+    background: #d0d0d0 !important;
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+}
+
 /* ── Letterhead ── */
 .letterhead {
     border: 2px solid #1a3c52;

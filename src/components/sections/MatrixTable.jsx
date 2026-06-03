@@ -10,7 +10,8 @@ import classes from '../ReportTables.module.css'
 const MatrixTable = ({ section, valueMap }) => {
     const { title, subtitle, columns, rows, showColumnTotal, showTotal } = section
 
-    const getValue = dxId => parseFloat(valueMap?.[dxId]) || 0
+    const getValue = dxId => dxId == null ? 0 : parseFloat(valueMap?.[dxId]) || 0
+    const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 0 })
 
     const rowTotals = rows.map(row =>
         columns.reduce((sum, col) => sum + getValue(row.dxIds[col.key]), 0)
@@ -44,12 +45,12 @@ const MatrixTable = ({ section, valueMap }) => {
                         <tr key={row.label}>
                             <td>{row.label}</td>
                             {columns.map(col => (
-                                <td key={col.key} className={classes.numCell}>
-                                    {getValue(row.dxIds[col.key])}
-                                </td>
+                                row.dxIds[col.key] == null
+                                    ? <td key={col.key} className={classes.naCell}>N/A</td>
+                                    : <td key={col.key} className={classes.numCell}>{fmt(getValue(row.dxIds[col.key]))}</td>
                             ))}
                             {showColumnTotal && (
-                                <td className={classes.numCell}>{rowTotals[rowIndex]}</td>
+                                <td className={classes.numCell}>{fmt(rowTotals[rowIndex])}</td>
                             )}
                         </tr>
                     ))}
@@ -57,10 +58,10 @@ const MatrixTable = ({ section, valueMap }) => {
                         <tr className={classes.totalRow}>
                             <td>TOTAL</td>
                             {colTotals.map((total, i) => (
-                                <td key={columns[i].key} className={classes.numCell}>{total}</td>
+                                <td key={columns[i].key} className={classes.numCell}>{fmt(total)}</td>
                             ))}
                             {showColumnTotal && (
-                                <td className={classes.numCell}>{grandTotal}</td>
+                                <td className={classes.numCell}>{fmt(grandTotal)}</td>
                             )}
                         </tr>
                     )}

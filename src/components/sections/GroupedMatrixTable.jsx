@@ -14,6 +14,7 @@ const GroupedMatrixTable = ({ section, valueMap }) => {
     const { title, subtitle, groupLabel, groupHeader, columns, rows, showTotal } = section
 
     const getValue = dxId => parseFloat(valueMap?.[dxId]) || 0
+    const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 0 })
 
     const rowTotals = rows.map(row =>
         columns.reduce((sum, col) => sum + getValue(row.dxIds[col.key]), 0)
@@ -57,19 +58,19 @@ const GroupedMatrixTable = ({ section, valueMap }) => {
                             <td>{row.label}</td>
                             {columns.map(col => (
                                 <td key={col.key} className={classes.numCell}>
-                                    {getValue(row.dxIds[col.key])}
+                                    {fmt(getValue(row.dxIds[col.key]))}
                                 </td>
                             ))}
-                            <td className={classes.numCell}>{rowTotals[rowIndex]}</td>
+                            <td className={classes.numCell}>{fmt(rowTotals[rowIndex])}</td>
                         </tr>
                     ))}
                     {showTotal && (
                         <tr className={classes.totalRow}>
                             <td>TOTAL</td>
                             {colTotals.map((total, i) => (
-                                <td key={columns[i].key} className={classes.numCell}>{total}</td>
+                                <td key={columns[i].key} className={classes.numCell}>{fmt(total)}</td>
                             ))}
-                            <td className={classes.numCell}>{grandTotal}</td>
+                            <td className={classes.numCell}>{fmt(grandTotal)}</td>
                         </tr>
                     )}
                 </tbody>

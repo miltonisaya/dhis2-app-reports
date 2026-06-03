@@ -92,20 +92,56 @@ export const REPORTS = [
                     { label: 'Others',       key: 'OTHERS' },
                 ],
                 rows: [
-                    {
-                        label: 'Number of sessions conducted by expert',
-                        dxIds: { RADIO: 'Fy7bZbLhNSs', TV: 'NlWWqVHGdjM', SOCIAL: 'qIoTXxakq7C', OTHERS: 'B8GeyQ9SWKN' },
-                    },
-                    {
-                        label: 'Number of national media engaged in provision of health messages',
-                        dxIds: { RADIO: 'NQgXOCoKWmY', TV: 'KBY47sIzjs4', SOCIAL: 'QxCZuiIOD7S', OTHERS: 'nzNjnmA1zD9' },
-                    },
-                    // TODO: replace placeholders with real DHIS2 UIDs
-                    // { label: 'Number of people reached by mass and social media contents aired', dxIds: { RADIO: 'DX_MM_PEOPLE_RADIO', TV: 'DX_MM_PEOPLE_TV', SOCIAL: 'DX_MM_PEOPLE_SOCIAL', OTHERS: 'DX_MM_PEOPLE_OTHERS' } },
-                    {
-                      label: 'Number of mass media contents produced and aired to address specific health area',
-                        dxIds: { RADIO: 'ITdHv76yKln', TV: 'OUNyKcDfjXu', SOCIAL: 'O773eL7HB6P', OTHERS: 'Ca1KCq3gtib' },
-                    },
+                  {
+                    label: 'Number of expert live sessions conducted',
+                    dxIds: { RADIO: 'RJU98gxyGrE', TV: 'B97FMelXR4Q', SOCIAL: null, OTHERS: 'iCDwUZp2V1e' },
+                  },
+                  {
+                    label: 'Number of spots aired radio/TV spots',
+                    dxIds: { RADIO: 'A4LnWJio4n4', TV: 'SFEo2iBSxWO', SOCIAL: null, OTHERS: 'JOjo5uaBgVI' },
+                  },
+                  {
+                    label: 'Number of recorded sessions aired',
+                    dxIds: { RADIO: 'y2FAwiweVrI', TV: 'pBk4PXT65cw', SOCIAL: null, OTHERS: 'mP5cuX5qJ5e' },
+                  },
+                  {
+                    label: 'Number of presenter mentions aired',
+                    dxIds: { RADIO: 'I1cqweuuHuX', TV: 'dYtg7vrxrLe', SOCIAL: null, OTHERS: 'hAybNDKj66n' },
+                  },
+                  {
+                    label: 'Number of social media contents shared',
+                    dxIds: { RADIO: null, TV: null, SOCIAL: 'O773eL7HB6P', OTHERS: null },
+                  },
+                  {
+                    label: 'Estimated Number of people reached through recorded sessions',
+                    dxIds: { RADIO: 'a2XSywOpTSM', TV: 'gef0tdKfshF', SOCIAL: null, OTHERS: 'EOxw27BeF0N' },
+                  },
+                  {
+                    label: 'Estimated Number of people reached through presenter mentions',
+                    dxIds: { RADIO: 'ezDi2IBVMpr', TV: 'a0XCHhIAQZH', SOCIAL: null, OTHERS: 'mbsm88WrFeL' },
+                  },
+                  {
+                    label: 'Estimated Number of people reached through expert live session',
+                    dxIds: { RADIO: 'Psk8Gig3LDn', TV: 'eUZCf1JFlJa', SOCIAL: null, OTHERS: 'n9rPj7PQHPG' },
+                  },
+                  {
+                    label: 'Estimated number of people reached through social media platforms',
+                    dxIds: { RADIO: null, TV: null, SOCIAL: 'EywPSEkmA8Z', OTHERS: null },
+                  },
+                  {
+                    label: 'Number of sessions conducted by expert',
+                    dxIds: { RADIO: 'Fy7bZbLhNSs', TV: 'NlWWqVHGdjM', SOCIAL: 'qIoTXxakq7C', OTHERS: 'B8GeyQ9SWKN' },
+                  },
+                  {
+                    label: 'Number of national media engaged in provision of health messages',
+                    dxIds: { RADIO: 'NQgXOCoKWmY', TV: 'KBY47sIzjs4', SOCIAL: 'QxCZuiIOD7S', OTHERS: 'nzNjnmA1zD9' },
+                  },
+                  // TODO: replace placeholders with real DHIS2 UIDs
+                  // { label: 'Number of people reached by mass and social media contents aired', dxIds: { RADIO: 'DX_MM_PEOPLE_RADIO', TV: 'DX_MM_PEOPLE_TV', SOCIAL: 'DX_MM_PEOPLE_SOCIAL', OTHERS: 'DX_MM_PEOPLE_OTHERS' } },
+                  {
+                    label: 'Number of mass media contents produced and aired to address specific health area',
+                    dxIds: { RADIO: 'ITdHv76yKln', TV: 'OUNyKcDfjXu', SOCIAL: 'O773eL7HB6P', OTHERS: 'Ca1KCq3gtib' },
+                  },
                 ],
             },
             {

@@ -9,6 +9,7 @@ const SimpleTable = ({ section, valueMap }) => {
     const { title, subtitle, valueLabel, rows, showTotal } = section
 
     const getValue = dxId => parseFloat(valueMap?.[dxId]) || 0
+    const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 0 })
 
     const total = showTotal ? rows.reduce((sum, row) => sum + getValue(row.dxId), 0) : null
 
@@ -28,13 +29,13 @@ const SimpleTable = ({ section, valueMap }) => {
                     {rows.map(row => (
                         <tr key={row.dxId}>
                             <td>{row.label}</td>
-                            <td className={classes.numCell}>{getValue(row.dxId)}</td>
+                            <td className={classes.numCell}>{fmt(getValue(row.dxId))}</td>
                         </tr>
                     ))}
                     {showTotal && (
                         <tr className={classes.totalRow}>
                             <td>TOTAL</td>
-                            <td className={classes.numCell}>{total}</td>
+                            <td className={classes.numCell}>{fmt(total)}</td>
                         </tr>
                     )}
                 </tbody>
