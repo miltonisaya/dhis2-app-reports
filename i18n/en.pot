@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-04-21T10:22:38.580Z\n"
-"PO-Revision-Date: 2026-04-21T10:22:38.580Z\n"
+"POT-Creation-Date: 2026-06-03T12:02:35.302Z\n"
+"PO-Revision-Date: 2026-06-03T12:02:35.303Z\n"
 
 msgid "Please select at least one period."
 msgstr "Please select at least one period."
@@ -40,6 +40,9 @@ msgstr "Period"
 
 msgid "Organisation Unit"
 msgstr "Organisation Unit"
+
+msgid "Print Report"
+msgstr "Print Report"
 
 msgid "Loading..."
 msgstr "Loading..."

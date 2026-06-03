@@ -216,7 +216,7 @@ export const REPORTS = [
     },
     {
         id: 'mid-media',
-        name: 'Health and Promotion in Mid Media Report',
+        name: 'Mid Media Report',
         letterhead: [
             'MINISTRY OF HEALTH',
             'DIRECTORATE OF PREVENTIVE SERVICES- HEALTH PROMOTION SECTION',
