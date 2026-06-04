@@ -6,7 +6,7 @@ export const REPORTS = [
     {
         id: 'school-program',
         name: 'School Program Report',
-        programId: 'SCHOOL_PROGRAM_ID',
+        programId: 'pU43TpUM0nE',
         letterhead: [
             'MINISTRY OF HEALTH',
             'DIRECTORATE OF PREVENTIVE SERVICES- HEALTH PROMOTION SECTION',
@@ -67,6 +67,35 @@ export const REPORTS = [
                     // { label: '12. None', dxId: 'DX_IEC_NONE' },
                 ],
             },
+            {
+                id: 'school-attendance',
+                title: 'Attendance',
+                type: 'grouped-matrix',
+                groupLabel: 'Category',
+                groupHeader: 'Number',
+                showTotal: true,
+                columns: [
+                    { label: 'Male',   key: 'MALE' },
+                    { label: 'Female', key: 'FEMALE' },
+                ],
+                rows: [
+                    { label: 'Pupils/Students',             dxIds: { MALE: 'pU43TpUM0nE.eH2B3tfml8F', FEMALE: 'pU43TpUM0nE.CnIrOTsAvRJ' } },
+                    { label: 'Teachers/Tutors/Lecturers',   dxIds: { MALE: 'pU43TpUM0nE.AUfzKhXSXQu', FEMALE: 'pU43TpUM0nE.xGPrunEry5l' } },
+                ],
+            },
+            {
+                id: 'school-referrals',
+                title: 'Number of referrals provided',
+                type: 'simple',
+                valueLabel: 'Number',
+                showTotal: true,
+                rows: [
+                    { label: 'Gender',          dxId: 'pU43TpUM0nE.y4d5n19mEwL' },
+                    { label: 'Health Facility', dxId: 'pU43TpUM0nE.YLMtLP16NvZ' },
+                    { label: 'Social Welfare',  dxId: 'pU43TpUM0nE.ewCPRtMOuef' },
+                    { label: 'Other',           dxId: 'pU43TpUM0nE.bEu7kDUA035' },
+                ],
+            },
         ],
     },
     {
@@ -107,6 +136,10 @@ export const REPORTS = [
                   {
                     label: 'Number of presenter mentions aired',
                     dxIds: { RADIO: 'I1cqweuuHuX', TV: 'dYtg7vrxrLe', SOCIAL: null, OTHERS: 'hAybNDKj66n' },
+                  },
+                  {
+                    label: 'Number of social media contents shared',
+                    dxIds: { RADIO: null, TV: null, SOCIAL: 'O773eL7HB6P', OTHERS: null },
                   },
                   {
                     label: 'Estimated Number of people reached through recorded sessions',
@@ -223,17 +256,6 @@ export const REPORTS = [
             'HEALTH EDUCATION AND PROMOTION IN MID MEDIA',
         ],
         sections: [
-            {
-                id: 'mid-media-events',
-                title: 'MID MEDIA',
-                subtitle: 'Number of events used in provision of health messages',
-                type: 'simple',
-                valueLabel: 'Number',
-                showTotal: true,
-                rows: [
-                    { label: 'Number of social media contents shared', dxId: 'O773eL7HB6P' },
-                ],
-            },
             {
                 id: 'mid-media-people-reached',
                 title: 'Type of community group reached',
